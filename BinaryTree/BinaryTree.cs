@@ -1,38 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BinaryTree
 {
-    public class Node
-    {
-        public int value;
-        public Node left, right;
-
-        public Node(int i)
-        {
-            this.value = i;
-            left = null;
-            right = null;
-        }
-    }
-
     public class BSTree
     {
-        private Node root;
+        private Node _root;
         private int _count = 0;
 
         public BSTree()
         {
-            root = null;
+            _root = null;
             _count = 0;
+        }
+
+        /// <summary>
+        /// Return the Root Node
+        /// </summary>
+        public Node Root
+        {
+            get { return _root; }
         }
 
         /// <summary>
         /// Returns the number of nodes in the tree
         /// </summary>
         /// <returns>Number of nodes in the tree</returns>
-        public int count()
+        public int Count()
         {
             return _count;
         }
@@ -43,29 +36,18 @@ namespace BinaryTree
         /// <param name="value">Value of node to locate</param>
         /// <returns>Returns null if it fails to find the node, else returns reference to node</returns>
         /// 
-        public Node findValue(int value)
+        public Node FindValue(int value)
         {
-            Node np = root;
+            Node np = _root;
 
             while (np != null)
             {
-                if (value == np.value) { return np; }
-                else if (value <= np.value) { np = np.left; }
-                else { np = np.right; }
+                if (value == np.Value) { return np; }
+                else if (value <= np.Value) { np = np.Left; }
+                else { np = np.Right; }
             }
 
             return null;
-        }
-
-        // Recursively locates a empty slot in the binary tree and insert the node
-        private void add(Node node, ref Node tree)
-        {
-            if (tree == null) { tree = node; }
-            else
-            {
-                if (node.value <= tree.value) { add(node, ref tree.left); }
-                else { add(node, ref tree.right); }
-            }
         }
 
         /// <summary>
@@ -73,20 +55,13 @@ namespace BinaryTree
         /// </summary>
         /// <param name="i">Value of node the node</param>
         /// <returns> Returns reference to the new node is the node was inserted.</returns>
-        public Node insert(int i)
+        public Node Insert(int i)
         {
             Node node = new Node(i);
-            try
-            {
-                if (root == null) { root = node; }
-                else { add(node, ref root); }
-                _count++;
-                return node;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            if (_root == null) { _root = node; }
+            else { Add(node, ref _root); }
+            _count++;
+            return node;
         }
 
         /// <summary>
@@ -94,30 +69,41 @@ namespace BinaryTree
         /// </summary>
         /// <param name="i"></param>
         /// <returns>Returns referente to the node parent, or null if it's the root.</returns>
-        public Node findParent(int i)
+        public Node FindParent(int i)
         {
-            Node target = this.findValue(i);
-            Node current = root;
+            Node target = this.FindValue(i);
+            Node current = _root;
             Node parent = null;
 
-            if (target == root || target == null) return null;
+            if (target == _root || target == null) return null;
             while (current != null)
             {
-                if (current.left == target || current.right == target)
+                if (current.Left == target || current.Right == target)
                 {
                     parent = current;
                     break;
                 }
-                if (target.value <= current.value && current.left != target)
+                if (target.Value <= current.Value && current.Left != target)
                 {
-                    current = current.left;
+                    current = current.Left;
                 }
-                if (target.value > current.value && current.right != target)
+                if (target.Value > current.Value && current.Right != target)
                 {
-                    current = current.right;
+                    current = current.Right;
                 }
             }
             return parent;
+        }
+
+        // Recursively locates a empty slot in the binary tree and insert the node
+        private static void Add(Node node, ref Node tree)
+        {
+            if (tree == null) { tree = node; }
+            else
+            {
+                if (node.Value <= tree.Value) { Add(node, ref tree.Left); }
+                else { Add(node, ref tree.Right); }
+            }
         }
     }
 }
